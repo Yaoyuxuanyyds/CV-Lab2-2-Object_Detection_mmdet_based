@@ -40,7 +40,7 @@
 
 - 下面展示了 VOC 数据集的目录格式和重构后的 COCO 目录格式：
 
-  <img src="C:\Users\Yu Xuan\AppData\Roaming\Typora\typora-user-images\image-20240525104610256.png" alt="image-20240525104610256" style="zoom:50%;" /><img src="C:\Users\Yu Xuan\AppData\Roaming\Typora\typora-user-images\image-20240525104734980.png" alt="image-20240525104734980" style="zoom:50%;" />
+  <img src="work_dirs\static\image-20240525104734980.png" alt="image-20240525104734980" style="zoom:50%;" /><img src="work_dirs\static\image-20240525104610256.png" alt="image-20240525104610256" style="zoom:50%;" />
 
 - **进行格式转换和重构后，请将 coco 目录放在项目根目录的 `data\`目录下。*（后面的指令样例均与这样的项目结果对应）***
 
@@ -56,11 +56,11 @@
 
 - 如果希望模型直接输出第一阶段 RPN 网络的候选框（Proposal Boxes)， 需要对 `mmdetection\mmdet\models\detectors\two_stage.py` 中的对应部分进行修改，即直接将 `rpn_results_list` 作为输出。如下图：
 
-  ![image-20240529163249312](C:\Users\Yu Xuan\AppData\Roaming\Typora\typora-user-images\image-20240529163249312.png)
+  ![image-20240529163249312](work_dirs\static\image-20240529163249312.png)
 
 - 如果希望选择模型输出的检测框是否包含标签名和 score, 可以对 `mmdetection\mmdet\visualization\local_visualizer.py` 中的 `draw_texts()`进行修改。
 
-  ![image-20240529163436634](C:\Users\Yu Xuan\AppData\Roaming\Typora\typora-user-images\image-20240529163436634.png)
+  ![image-20240529163436634](D:\My Files\Programing\Computer Vision\Lab2\Lab2-Object-Detection\work_dirs\static\image-20240529163436634.png)
 
 ​	
 

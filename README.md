@@ -1,4 +1,4 @@
-<h1 align = "center">Lab2: Object Detection Based on Faster-RCNN and Yolov3</h1>
+<h1 align = "center">Lab2: Object Detection Based on Faster-RCNN and Yolo-v3</h1>
 
 
 
@@ -32,7 +32,7 @@
 
 
 
-### (1) 数据集准备
+### (2) 数据集准备
 
 - 如果希望在本地进行训练，需要对 VOC 数据集进行格式转换与目录重构。
 
@@ -46,9 +46,9 @@
 
 
 
-###  (2) 修改 mmdetection 源码
+###  (3) 修改 mmdetection 源码
 
-***由于 mmdetection 框架源码无法上传至 git, 因此需要手动下载到项目目录中并做相应修改。***
+
 
 - `mmdetection/mmdet/datasets/coco.py`: 将 `CocoDataset` 类中的 `classes` 和 `palette` 从 coco 的类别和配色修改为 VOC 数据集对应的类别名和配色盘。
 
@@ -162,19 +162,6 @@
       - `base_sizes`: 不同特征图层对应的锚框大小。
 - `input_size = (320, 320)`: 输入图像的大小。
 
-### 数据处理流水线
-- `train_pipeline`: 训练数据处理流水线。
-  - `LoadImageFromFile`: 从文件加载图像。
-  - `LoadAnnotations`: 加载标注数据，包括边界框。
-  - `Expand`: 扩展图像尺寸，填充背景颜色。
-  - `MinIoURandomCrop`: 随机裁剪图像，确保裁剪后的图像与目标的 IoU 满足一定条件。
-  - `Resize`: 调整图像大小到 `input_size`。
-  - `RandomFlip`: 随机翻转图像。
-  - `PhotoMetricDistortion`: 图像色彩失真增强。
-  - `PackDetInputs`: 打包检测输入。
-- `test_pipeline`: 测试数据处理流水线。
-  - 与训练流水线类似，但省略了一些数据增强步骤。
-
 #### 数据加载器和数据集配置
 - `dataset_type = 'CocoDataset'`: 数据集类型为 COCO 格式。
 - `data_root = 'data/coco/'`: 数据集的根目录。
@@ -183,11 +170,6 @@
   - `dataset`: 训练数据集配置。
     - `type='RepeatDataset'`: **使用重复数据集加速训练**。
     - `times=10`: **数据集重复次数**。
-    - `dataset`: 包含实际数据集配置。
-      - `ann_file='annotations/instances_train2017.json'`: 训练集注释文件路径。
-      - `data_prefix=dict(img='train2017/')`: 训练集图像路径前缀。
-      - `filter_cfg=dict(filter_empty_gt=True, min_size=32)`: 过滤空标注和小于 32 像素的标注。
-      - `pipeline=train_pipeline`: 使用训练数据处理流水线。
 
 #### 模型设置
 - `model`:
@@ -232,15 +214,17 @@
 
 
 
+- ***由于 mmdetection 框架源码属于子模块，请使用 `git clone` 时加上 `--recursive` 参数。它会自动初始化并更新每一个子模块。***
+
 - **在完成了上述数据集准备工作，并按照自己的需求修改 mmdetection 框架脚本与配置文件后，可以在项目根目录下通过下面的指令进行模型的训练与测试。**
 
 - ***如果选择加载作者训练得到的模型权重，请至云盘地址下载 .pth 文件后放于对应模型的 `work_dirs/` 目录下。***
 
-
+  
 
 ### 1. 单 GPU 训练
 
-`train.py` 脚本用于在单 GPU 环境中启动训练任务。这在调试或资源有限的情况下非常有用。以下是 `train.py` 的使用方法：
+`train.py` 脚本用于在单 GPU 环境中启动训练任务。
 
 - #### 基本用法
 
@@ -293,7 +277,7 @@ python tools/train.py yolov3_mobilenetv2_8xb24-320-300e_coco.py --resume-from wo
 
 ### 2. 多 GPU 分布式训练
 
-`dist_train.sh` 脚本用于在分布式环境中启动训练任务。这个脚本通常用于大规模训练，能够利用多台机器上的多个 GPU 来加速训练过程。以下是 `dist_train.sh` 的使用方法：
+`dist_train.sh` 脚本用于在分布式环境中启动训练任务。
 
 - #### 基本用法
 
@@ -333,7 +317,7 @@ mmdetection/tools/dist_train.sh yolov3_mobilenetv2_8xb24-320-300e_coco.py 4 --wo
 
 ### 3. 使用测试数据集测试模型
 
-`test.py` 脚本用于在单 GPU 或多 GPU 环境中对训练好的模型进行评估。以下是 `test.py` 的使用方法：
+`test.py` 脚本用于在单 GPU 或多 GPU 环境中对训练好的模型进行评估。
 
 - #### 基本用法
 
@@ -368,7 +352,7 @@ python tools/test.py <CONFIG> <CHECKPOINT> [optional arguments]
 ​	假设你有一个配置文件路径为 `yolov3_mobilenetv2_8xb24-320-300e_coco.py`，以及训练好的模型检查点文件路径为 `work_dirs\yolov3_mobilenetv2_voc12/latest.pth`。
 
 1. **基本测试**
-   
+  
    ```bash
    python tools/test.py yolov3_mobilenetv2_8xb24-320-300e_coco.py work_dirs\yolov3_mobilenetv2_voc12/latest.pth
    ```
@@ -384,7 +368,7 @@ python tools/test.py <CONFIG> <CHECKPOINT> [optional arguments]
    ```
 
 4. **将可视化结果保存到指定目录**
-   
+  
    ```bash
    python tools/test.py yolov3_mobilenetv2_8xb24-320-300e_coco.py work_dirs\yolov3_mobilenetv2_voc12/latest.pth --show-dir results
    ```
@@ -422,13 +406,13 @@ python demo/image_demo.py <IMAGE_PATH> <CONFIG> <CHECKPOINT> [optional arguments
 ​	假设你有一个图像文件路径为 `test.jpg`，一个配置文件路径为 `yolov3_mobilenetv2_8xb24-320-300e_coco.py`，以及训练好的模型检查点文件路径为 `work_dirs\yolov3_mobilenetv2_voc12/latest.pth`。
 
 1. **基本推理**
-   
+  
    ```bash
    python demo/image_demo.py test.jpg yolov3_mobilenetv2_8xb24-320-300e_coco.py work_dirs\yolov3_mobilenetv2_voc12/latest.pth
    ```
    
 2. **在指定设备上进行推理**
-   
+  
    ```bash
    python demo/image_demo.py test.jpg yolov3_mobilenetv2_8xb24-320-300e_coco.py work_dirs\yolov3_mobilenetv2_voc12/latest.pth --device cpu(cuda:0)
    ```

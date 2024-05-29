@@ -20,6 +20,10 @@
 
 
 
+---
+
+---
+
 
 
 <h2 align = "center">2. 项目说明</h2>
@@ -60,11 +64,11 @@
 
 - 如果希望模型直接输出第一阶段 RPN 网络的候选框（Proposal Boxes)， 需要对 `mmdetection\mmdet\models\detectors\two_stage.py` 中的对应部分进行修改，即直接将 `rpn_results_list` 作为输出。如下图：
 
-  ![image-20240529163249312](work_dirs\static\image-20240529163249312.png)
+  <img src="work_dirs\static\image-20240529163249312.png" alt="image-20240529163249312" />
 
 - 如果希望选择模型输出的检测框是否包含标签名和 score, 可以对 `mmdetection\mmdet\visualization\local_visualizer.py` 中的 `draw_texts()`进行修改。
 
-  ![image-20240529163436634](D:\My Files\Programing\Computer Vision\Lab2\Lab2-Object-Detection\work_dirs\static\image-20240529163436634.png)
+  <img src="work_dirs\static\image-20240529163436634.png" alt="image-20240529163436634" />
 
 ​	
 
@@ -210,13 +214,9 @@
 
 
 
+---
 
-
-
-
-
-
-
+---
 
 
 
